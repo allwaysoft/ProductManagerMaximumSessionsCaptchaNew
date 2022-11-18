@@ -25,6 +25,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private DataSource dataSource;
 
     @Autowired
+    private CustomLoginFailureHandler loginFailureHandler;
+    @Autowired
+    private CustomLoginSuccessHandler successHandler;
+
+    @Autowired
     public void configAuthentication(AuthenticationManagerBuilder authBuilder) throws Exception {
         authBuilder.jdbcAuthentication()
                 .dataSource(dataSource)
@@ -65,6 +70,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin().loginPage("/login")
                 .permitAll()
+                .failureHandler(loginFailureHandler)
+                .successHandler(successHandler)
                 .and()
                 .logout().permitAll()
                 .and()
